@@ -12,15 +12,6 @@
 		<version>1.0.0.BUILD-SNAPSHOT</version>
 	</parent>
 
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>spring-data-mongodb-utils</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
 	<build>
 		<plugins>
 			<plugin>
@@ -29,7 +20,7 @@
 				<version>${apt.version}</version>
 				<dependencies>
 					<dependency>
-						<groupId>com.mysema.querydsl</groupId>
+						<groupId>com.querydsl</groupId>
 						<artifactId>querydsl-apt</artifactId>
 						<version>${querydsl.version}</version>
 					</dependency>
@@ -41,13 +32,14 @@
 							<goal>process</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>target/generated-sources/annotations</outputDirectory>
+							<outputDirectory>target/generated-sources/queries</outputDirectory>
 							<processor>org.springframework.data.mongodb.repository.support.MongoAnnotationProcessor</processor>
 							<logOnlyOnError>true</logOnlyOnError>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
+
 		</plugins>
 	</build>
 

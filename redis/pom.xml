@@ -9,6 +9,7 @@
 		<groupId>org.springframework.data.examples</groupId>
 		<artifactId>spring-data-examples</artifactId>
 		<version>1.0.0.BUILD-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>Spring Data Redis - Examples</name>
@@ -18,21 +19,34 @@
 	    <module>util</module>
 		<module>cluster-sentinel</module>
 		<module>example</module>
+		<module>cluster</module>
+		<module>repositories</module>
 	</modules>
 
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
 
 		<dependency>
 			<groupId>joda-time</groupId>
 			<artifactId>joda-time</artifactId>
 		</dependency>
 
-		<dependency>
-			<groupId>redis.clients</groupId>
-			<artifactId>jedis</artifactId>
-			<version>2.7.2</version>
-		</dependency>
-
 	</dependencies>
+
+	<dependencyManagement>
+
+		<dependencies>
+			<dependency>
+				<groupId>com.github.kstyrc</groupId>
+				<artifactId>embedded-redis</artifactId>
+				<version>0.6</version>
+			</dependency>
+		</dependencies>
+
+	</dependencyManagement>
 
 </project>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,33 +20,29 @@ import static org.hamcrest.core.IsNull.*;
 import static org.junit.Assert.*;
 
 import example.springdata.mongodb.customer.Customer;
-import example.springdata.mongodb.util.RequiresMongoDB;
 
 import java.util.Map;
 
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.script.ExecutableMongoScript;
 import org.springframework.data.mongodb.core.script.NamedMongoScript;
-import org.springframework.data.util.Version;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 
 /**
  * @author Christoph Strobl
+ * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ApplicationConfiguration.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class ServersideScriptTests {
-
-	@ClassRule public static RequiresMongoDB mongodbAvailable = RequiresMongoDB.atLeast(new Version(2, 6));
 
 	@Autowired AdvancedRepository repository;
 	@Autowired MongoOperations operations;
@@ -108,7 +104,7 @@ public class ServersideScriptTests {
 		operations.getConverter().write(customer, dbo);
 
 		String scriptString = String.format(
-				"object  =  db.%1$s.findOne('{\"_id\": \"%2$s\"}'); if (object == null) { db.%1s.insert(%3$s); return null; } else { return object; }",
+				"object  =  db.%1$s.findOne({\"_id\": \"%2$s\"}); if (object == null) { db.%1s.insert(%3$s); return null; } else { return object; }",
 				collectionName, id, dbo);
 
 		return new ExecutableMongoScript(scriptString);

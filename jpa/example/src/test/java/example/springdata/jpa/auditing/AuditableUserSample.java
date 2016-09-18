@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,24 +21,19 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
-
-import example.springdata.jpa.auditing.AuditableUser;
-import example.springdata.jpa.auditing.AuditableUserRepository;
-import example.springdata.jpa.auditing.AuditingConfiguration;
-import example.springdata.jpa.auditing.AuditorAwareImpl;
 
 /**
  * @author Oliver Gierke
  * @author Thomas Darimont
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @Transactional
-@ContextConfiguration(classes = AuditingConfiguration.class)
+@SpringBootTest
 public class AuditableUserSample {
 
 	@Autowired AuditableUserRepository repository;
@@ -58,7 +53,7 @@ public class AuditableUserSample {
 		user = repository.save(user);
 		user = repository.save(user);
 
-		assertEquals(user, user.getCreatedBy());
-		assertEquals(user, user.getLastModifiedBy());
+		assertThat(user.getCreatedBy(), is(user));
+		assertThat(user.getLastModifiedBy(), is(user));
 	}
 }

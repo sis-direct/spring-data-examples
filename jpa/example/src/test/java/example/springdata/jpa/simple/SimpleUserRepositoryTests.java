@@ -1,5 +1,5 @@
 /*
- * Copyright 2013-2014 the original author or authors.
+ * Copyright 2013-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +22,17 @@ import static org.springframework.data.domain.Sort.Direction.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -41,9 +42,9 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Thomas Darimont
  * @author Christoph Strobl
  */
-@RunWith(SpringJUnit4ClassRunner.class)
+@RunWith(SpringRunner.class)
 @Transactional
-@ContextConfiguration(classes = SimpleConfiguration.class)
+@SpringBootTest
 public class SimpleUserRepositoryTests {
 
 	@Autowired SimpleUserRepository repository;
@@ -88,13 +89,13 @@ public class SimpleUserRepositoryTests {
 	}
 
 	@Test
-	public void useGuavaOptionalInsteadOfNulls() {
+	public void useOptionalAsReturnAndParameterType() {
 
-		assertThat(repository.findByUsername("foobar").isPresent(), is(false));
+		assertThat(repository.findByUsername(Optional.of("foobar")), is(Optional.empty()));
 
 		repository.save(user);
 
-		assertThat(repository.findByUsername("foobar").isPresent(), is(true));
+		assertThat(repository.findByUsername(Optional.of("foobar")).isPresent(), is(true));
 	}
 
 	@Test

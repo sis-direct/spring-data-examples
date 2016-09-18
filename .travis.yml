@@ -4,8 +4,8 @@ jdk:
   - oraclejdk8
 
 services:
-  - mongodb
   - redis-server
+  - cassandra
 
 cache:
   directories:

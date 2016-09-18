@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,19 +22,11 @@ import static org.junit.Assert.*;
 import java.util.Date;
 
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import example.springdata.mongodb.aggregation.ApplicationConfiguration;
-import example.springdata.mongodb.aggregation.Invoice;
-import example.springdata.mongodb.aggregation.LineItem;
-import example.springdata.mongodb.aggregation.Order;
-import example.springdata.mongodb.aggregation.OrderRepository;
-import example.springdata.mongodb.util.RequiresMongoDB;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Integration tests for {@link OrderRepository}.
@@ -42,11 +34,9 @@ import example.springdata.mongodb.util.RequiresMongoDB;
  * @author Thomas Darimont
  * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = ApplicationConfiguration.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class OrderRepositoryIntegrationTests {
-
-	@ClassRule public static RequiresMongoDB mongodbAvailable = RequiresMongoDB.anyVersion();
 
 	@Autowired OrderRepository repository;
 

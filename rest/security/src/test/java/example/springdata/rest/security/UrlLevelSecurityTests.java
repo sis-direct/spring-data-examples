@@ -22,23 +22,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.*;
 
-import example.springdata.rest.security.Application;
-import example.springdata.rest.security.Employee;
-import example.springdata.rest.security.SecurityConfiguration;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.security.web.FilterChainProxy;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -50,9 +45,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Greg Turnquist
  * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = { Application.class, SecurityConfiguration.class })
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class UrlLevelSecurityTests {
 
 	static final String PAYLOAD = "{\"firstName\": \"Saruman\", \"lastName\": \"the White\", " + "\"title\": \"Wizard\"}";
@@ -75,7 +69,7 @@ public class UrlLevelSecurityTests {
 
 		mvc.perform(get("/").//
 				accept(MediaTypes.HAL_JSON)).//
-				andExpect(header().string("Content-Type", MediaTypes.HAL_JSON.toString())).//
+				andExpect(content().contentTypeCompatibleWith(MediaTypes.HAL_JSON)).//
 				andExpect(status().isOk()).//
 				andDo(print());
 	}
@@ -94,12 +88,12 @@ public class UrlLevelSecurityTests {
 	public void allowsGetRequestsButRejectsPostForUser() throws Exception {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.ACCEPT, MediaTypes.HAL_JSON.toString());
+		headers.add(HttpHeaders.ACCEPT, MediaTypes.HAL_JSON_VALUE);
 		headers.add(HttpHeaders.AUTHORIZATION, "Basic " + new String(Base64.encode(("greg:turnquist").getBytes())));
 
 		mvc.perform(get("/employees").//
 				headers(headers)).//
-				andExpect(content().contentType(MediaTypes.HAL_JSON)).//
+				andExpect(content().contentTypeCompatibleWith(MediaTypes.HAL_JSON)).//
 				andExpect(status().isOk()).//
 				andDo(print());
 
@@ -113,20 +107,22 @@ public class UrlLevelSecurityTests {
 	public void allowsPostRequestForAdmin() throws Exception {
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.set(HttpHeaders.ACCEPT, "application/hal+json");
+		headers.set(HttpHeaders.ACCEPT, MediaTypes.HAL_JSON_VALUE);
 		headers.set(HttpHeaders.AUTHORIZATION, "Basic " + new String(Base64.encode(("ollie:gierke").getBytes())));
 
 		mvc.perform(get("/employees").//
 				headers(headers)).//
-				andExpect(content().contentType(MediaTypes.HAL_JSON)).//
+				andExpect(content().contentTypeCompatibleWith(MediaTypes.HAL_JSON)).//
 				andExpect(status().isOk()).//
 				andDo(print());
 
 		headers.set(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
-		String location = mvc.perform(post("/employees").//
-				content(PAYLOAD).//
-				headers(headers)).//
+		String location = mvc
+				.perform(post("/employees").//
+						content(PAYLOAD).//
+						headers(headers))
+				.//
 				andExpect(status().isCreated()).//
 				andDo(print()).//
 				andReturn().getResponse().getHeader(HttpHeaders.LOCATION);

@@ -2,9 +2,6 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>spring-data-redis-example-utils</artifactId>
-	<name>Spring Data Redis - Example utilities</name>
-
 	<parent>
 		<groupId>org.springframework.data.examples</groupId>
 		<artifactId>spring-data-redis-examples</artifactId>
@@ -12,15 +9,22 @@
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
+	<artifactId>spring-data-redis-example-utils</artifactId>
+	<name>Spring Data Redis - Example Utilities</name>
+
 	<dependencies>
+
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-redis</artifactId>
+			<groupId>com.github.kstyrc</groupId>
+			<artifactId>embedded-redis</artifactId>
+			<optional>true</optional>
 		</dependency>
+
 	</dependencies>
 
 </project>

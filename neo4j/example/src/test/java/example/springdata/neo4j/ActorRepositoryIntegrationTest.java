@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.neo4j.ogm.session.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.neo4j.config.Neo4jConfiguration;
 import org.springframework.data.neo4j.repository.config.EnableNeo4jRepositories;
-import org.springframework.data.neo4j.server.InProcessServer;
-import org.springframework.data.neo4j.server.Neo4jServer;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
  * @author Oliver Gierke
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration
+@SpringApplicationConfiguration
 @Transactional
 public class ActorRepositoryIntegrationTest {
 
@@ -47,11 +45,6 @@ public class ActorRepositoryIntegrationTest {
 	@EnableTransactionManagement
 	@EnableNeo4jRepositories
 	static class ExampleConfig extends Neo4jConfiguration {
-
-		@Override
-		public Neo4jServer neo4jServer() {
-			return new InProcessServer();
-		}
 
 		@Override
 		public SessionFactory getSessionFactory() {

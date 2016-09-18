@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.querydsl.binding.QuerydslPredicate;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.MultiValueMap;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.mysema.query.types.Predicate;
+import com.querydsl.core.types.Predicate;
 
 /**
  * Controller to handle web requests for {@link User}s.
@@ -46,7 +47,8 @@ class UserController {
 
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	String index(Model model, //
-			@QuerydslPredicate(root = User.class) Predicate predicate, Pageable pageable, //
+			@QuerydslPredicate(root = User.class) Predicate predicate, //
+			@PageableDefault(sort = { "lastname", "firstname" }) Pageable pageable, //
 			@RequestParam MultiValueMap<String, String> parameters) {
 
 		ServletUriComponentsBuilder builder = ServletUriComponentsBuilder.fromCurrentRequest();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,51 +17,48 @@ package example.springdata.solr;
 
 import example.springdata.solr.product.Product;
 
+import java.util.stream.IntStream;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.solr.core.SolrTemplate;
 
 /**
  * @author Christoph Strobl
+ * @author Oliver Gierke
  */
-@Configuration
-@EnableAutoConfiguration
+@SpringBootApplication
 public class SolrTestConfiguration {
 
-	private @Autowired CrudRepository<Product, String> repo;
+	@Autowired CrudRepository<Product, String> repo;
 
-	@Bean
-	public SolrTemplate solrTemplate() {
-		return new SolrTemplate(new HttpSolrServer("http://localhost:8983/solr"), "collection1");
+	public @Bean SolrTemplate solrTemplate() {
+		return new SolrTemplate(new HttpSolrClient("http://localhost:8983/solr"), "collection1");
 	}
 
 	/**
 	 * Remove test data when context is shut down.
 	 */
-	@PreDestroy
-	public void deleteDocumentsOnShutdown() {
+	public @PreDestroy void deleteDocumentsOnShutdown() {
 		repo.deleteAll();
 	}
 
 	/**
 	 * Initialize Solr instance with test data once context has started.
 	 */
-	@PostConstruct
-	public void initWithTestData() {
+	public @PostConstruct void initWithTestData() {
 		doInitTestData(repo);
 	}
 
 	protected void doInitTestData(CrudRepository<Product, String> repository) {
 
-		for (int i = 0; i < 100; i++) {
-			repository.save(Product.builder().id("p-" + i).name("foobar").build());
-		}
+		IntStream.range(0, 100)
+				.forEach(index -> repository.save(Product.builder().id("p-" + index).name("foobar").build()));
 	}
 }

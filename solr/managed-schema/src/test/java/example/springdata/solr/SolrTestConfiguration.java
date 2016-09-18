@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,10 @@ import example.springdata.solr.product.ProductRepository;
 
 import javax.annotation.PreDestroy;
 
-import org.apache.solr.client.solrj.SolrServer;
-import org.apache.solr.client.solrj.impl.HttpSolrServer;
+import org.apache.solr.client.solrj.SolrClient;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.solr.repository.config.EnableSolrRepositories;
@@ -34,22 +35,20 @@ import org.springframework.data.solr.repository.config.EnableSolrRepositories;
  * 
  * @author Christoph Strobl
  */
-@Configuration
+@SpringBootApplication
 @EnableSolrRepositories(schemaCreationSupport = true, multicoreSupport = true)
 public class SolrTestConfiguration {
 
 	@Autowired ProductRepository repo;
 
-	@Bean
-	public SolrServer solrServer() {
-		return new HttpSolrServer("http://localhost:8983/solr");
+	public @Bean SolrClient solrServer() {
+		return new HttpSolrClient("http://localhost:8983/solr");
 	}
 
 	/**
 	 * Remove test data when context is shut down.
 	 */
-	@PreDestroy
-	public void deleteDocumentsOnShutdown() {
+	public @PreDestroy void deleteDocumentsOnShutdown() {
 		repo.deleteAll();
 	}
 }

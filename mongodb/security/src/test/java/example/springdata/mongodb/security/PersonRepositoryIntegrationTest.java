@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 the original author or authors.
+ * Copyright 2015-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,36 +18,28 @@ package example.springdata.mongodb.security;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import example.springdata.mongodb.security.Application;
-import example.springdata.mongodb.security.Person;
-import example.springdata.mongodb.security.PersonRepository;
-import example.springdata.mongodb.util.RequiresMongoDB;
-
 import java.util.Collections;
 import java.util.List;
 
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Integration test for {@link PersonRepository}.
  * 
  * @author Thomas Darimont
- * @authot Oliver Gierke
+ * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(classes = Application.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class PersonRepositoryIntegrationTest {
-
-	@ClassRule public static RequiresMongoDB mongodbAvailable = RequiresMongoDB.anyVersion();
 
 	@Autowired PersonRepository repository;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ import static org.springframework.data.geo.Metrics.*;
 
 import example.springdata.rest.stores.Store;
 import example.springdata.rest.stores.StoreRepository;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,9 +28,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.geo.Distance;
@@ -48,7 +46,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author Oliver Gierke
  */
 @Controller
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
+@RequiredArgsConstructor
 class StoresController {
 
 	private static final List<Distance> DISTANCES = Arrays.asList(new Distance(0.5, MILES), new Distance(1, MILES),

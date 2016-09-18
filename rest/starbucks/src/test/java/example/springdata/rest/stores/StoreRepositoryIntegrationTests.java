@@ -1,5 +1,5 @@
 /*
- * Copyright 2014-2015 the original author or authors.
+ * Copyright 2014-2016 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,33 +18,28 @@ package example.springdata.rest.stores;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 
-import example.springdata.rest.stores.Address;
-import example.springdata.rest.stores.Store;
-import example.springdata.rest.stores.StoreApp;
-import example.springdata.rest.stores.StoreRepository;
+import example.springdata.rest.stores.Store.Address;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
 import org.springframework.data.geo.Point;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * Integration tests for {@link StoreRepository}.
  * 
  * @author Oliver Gierke
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@WebAppConfiguration
-@SpringApplicationConfiguration(classes = StoreApp.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(classes = Application.class)
 public class StoreRepositoryIntegrationTests {
 
 	@Autowired StoreRepository repository;
